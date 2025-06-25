@@ -33,12 +33,10 @@ def index():
                 "date": request.form.get('date'),
                 "from_location": request.form.get('from_location'),
                 "to_location": request.form.get('to_location'),
-                "ferry_no": request.form.get('ferry_no'),
                 "dep_time": request.form.get('dep_time'),
                 "deck": request.form.get('deck'),
                 "seat_no": request.form.get('seat_no'),
-                "price": request.form.get('price'),
-                "ticket_no": request.form.get('ticket_no')
+                "price": request.form.get('price')
             }
 
             # 2. Generate dynamic filename
@@ -46,12 +44,11 @@ def index():
             initials = "".join([part[0] for part in name_parts if part]).upper()
             
             s_initials = sanitize_filename(initials)
-            s_tkt_no = sanitize_filename(ticket_details["ticket_no"])
             s_date = sanitize_filename(ticket_details["date"])
             s_from = sanitize_filename(ticket_details["from_location"])
             s_to = sanitize_filename(ticket_details["to_location"])
 
-            pdf_filename = f"{s_initials}_{s_tkt_no}_{s_date}_{s_from}_to_{s_to}.pdf"
+            pdf_filename = f"{s_initials}_{s_date}_{s_from}_to_{s_to}.pdf"
             pdf_filepath = os.path.join(PDF_DIR, pdf_filename)
             
             # 3. Generate the PDF
@@ -66,8 +63,6 @@ def index():
             response.set_cookie('last_from', ticket_details['from_location'])
             response.set_cookie('last_to', ticket_details['to_location'])
             response.set_cookie('last_time', ticket_details['dep_time'])
-            response.set_cookie('last_ferry', ticket_details['ferry_no'])
-            response.set_cookie('last_tkt_no', ticket_details['ticket_no'])
             
             return response
 

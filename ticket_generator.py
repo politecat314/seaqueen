@@ -67,7 +67,7 @@ class TicketGenerator:
         y_pos = 2.7
         labels_left = [
             ("NAME OF PASSENGER", "ފަސިންޖަރުގެ ނަން"), ("DATE", "ތާރީޚް"),
-            ("FROM", "ފުރިތަން"), ("TO", "ދާ ތަން"), ("FERRY NO", "ފެރީ ނަންބަރު")
+            ("FROM", "ފުރިތަން"), ("TO", "ދާ ތަން")
         ]
         x_box_left_start = 2.0 * inch
         box_width_left = 1.8 * inch
@@ -111,7 +111,7 @@ class TicketGenerator:
 
         # Other right fields
         y_pos = 1.3
-        labels_right = [("SEAT NO", "ސީޓް ނަންބަރު"), ("PRICE", "އަގު"), ("TKTNO", "ޓިކެޓް ނަންބަރު")]
+        labels_right = [("SEAT NO", "ސީޓް ނަންބަރު"), ("PRICE", "އަގު")]
         for eng, dhiv in labels_right:
             self.c.setFont("Helvetica", 9)
             self.c.drawString(4.0 * inch, y_pos * inch, eng)
@@ -130,12 +130,10 @@ class TicketGenerator:
         self.c.drawString(x_fill_left, 2.15 * inch, str(data.get("date", "")))
         self.c.drawString(x_fill_left, 1.65 * inch, str(data.get("from_location", "")))
         self.c.drawString(x_fill_left, 1.15 * inch, str(data.get("to_location", "")))
-        self.c.drawString(x_fill_left, 0.65 * inch, str(data.get("ferry_no", "")))
 
         self.c.drawString(4.75 * inch, 2.65 * inch, str(data.get("dep_time", "")))
         self.c.drawString(4.75 * inch, 1.25 * inch, str(data.get("seat_no", "")))
         self.c.drawString(4.75 * inch, 0.75 * inch, "MVR " + str(data.get("price", "")))
-        self.c.drawString(4.75 * inch, 0.25 * inch, str(data.get("ticket_no", "")))
 
         # Mark the selected deck
         deck = data.get("deck", "").upper()
