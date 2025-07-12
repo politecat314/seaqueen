@@ -4,6 +4,8 @@ import os
 import re
 from flask import Flask, render_template, request, send_file, make_response, flash
 from ticket_generator import TicketGenerator
+import json
+from datetime import datetime
 
 app = Flask(__name__)
 # A secret key is required for flashing messages and session management (like cookies)
@@ -48,17 +50,22 @@ def index():
             s_from = sanitize_filename(ticket_details["from_location"])
             s_to = sanitize_filename(ticket_details["to_location"])
 
-            pdf_filename = f"{s_initials}_{s_date}_{s_from}_to_{s_to}.pdf"
+            pdf_filename = f"{s_initials}_{s_date}_{s_from}_to_{s_to}"
             pdf_filepath = os.path.join(PDF_DIR, pdf_filename)
             
             # 3. Generate the PDF
-            generator = TicketGenerator(filename=pdf_filepath)
+            generator = TicketGenerator(filename=f"{PDF_DIR}/ticket.pdf") # would be overwritten for every new pdf
             generator.generate(ticket_details)
+
+            # 4. Save the data as a JSON file
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            with open(f"{PDF_DIR}/{timestamp}.json", 'w', encoding='utf-8') as f:
+                json.dump(ticket_details, f, ensure_ascii=False)
             
-            # 4. Prepare response to send the file and set cookies
-            response = make_response(send_file(pdf_filepath, as_attachment=True))
+            # 5. Prepare response to send the file and set cookies
+            response = make_response(send_file(f"{PDF_DIR}/ticket.pdf", as_attachment=True, download_name=f"{pdf_filename}.pdf"))
             
-            # 5. Set cookies with the last used data
+            # 6. Set cookies with the last used data
             response.set_cookie('last_date', ticket_details['date'])
             response.set_cookie('last_from', ticket_details['from_location'])
             response.set_cookie('last_to', ticket_details['to_location'])
