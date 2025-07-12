@@ -40,6 +40,12 @@ def index():
                 "seat_no": request.form.get('seat_no'),
                 "price": request.form.get('price')
             }
+            # Handle the case where 'from_location' is 'Other'
+            if ticket_details["from_location"] == "Other":
+                ticket_details["from_location"] = request.form.get('from_location_other', 'Other')
+            # Handle the case where 'to_location' is 'Other'
+            if ticket_details["to_location"] == "Other":
+                ticket_details["to_location"] = request.form.get('to_location_other', 'Other')
 
             # 2. Generate dynamic filename
             name_parts = ticket_details["passenger_name"].split()
